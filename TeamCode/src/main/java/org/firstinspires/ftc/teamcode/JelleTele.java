@@ -12,7 +12,7 @@ public class JelleTele extends BaseOpMode {
         MECANUM,
     }
 
-    protected DriveMode driveMode;
+    protected DriveMode driveMode = DriveMode.MECANUM;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -26,9 +26,11 @@ public class JelleTele extends BaseOpMode {
                 driveMode = DriveMode.MECANUM;
             }
 
-            logger.addData("drive mode", driveMode);
+            double mult = gamepad1.left_bumper ? 0.2 : gamepad1.right_bumper ? 0.5 : 1.0;
 
-            double mult = 1;
+            logger.addData("drive mode", driveMode);
+            logger.addData("precision mode", mult);
+
             switch (driveMode) {
             case TANK: {
                 double l = gamepad1.left_stick_y,
@@ -37,6 +39,7 @@ public class JelleTele extends BaseOpMode {
                 break;
             }
             case MECANUM: {
+                // right = +, left = -
                 double pivot = gamepad1.right_stick_x;
                 double mX, mY;
                 mX = gamepad1.left_stick_x;
@@ -52,9 +55,22 @@ public class JelleTele extends BaseOpMode {
         }
     }
 
+    // powers argument is modified and filled with the final powers
     protected void setMotorPowers(double mult, double[] powers) {
         for (int i = 0; i < 4; i++) {
-            motors[i].setPower(powers[i] * mult);
+            powers[i] = powers[i] * mult;
+        }
+
+        double max = Math.max(Math.max(powers[0], powers[1]), Math.max(powers[2], powers[3]));
+        double scale = 1 / max;
+        // don't increase power, only decrease
+        if (scale > 1) {
+            scale = 1;
+        }
+
+        for (int i = 0; i < 4; i++) {
+            powers[i] *= scale;
+            motors[i].setPower(powers[i]);
         }
     }
 }
