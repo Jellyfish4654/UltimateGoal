@@ -52,6 +52,7 @@ public class JelleTele extends BaseOpMode {
                 break;
             }
             }
+            logger.update();
         }
     }
 

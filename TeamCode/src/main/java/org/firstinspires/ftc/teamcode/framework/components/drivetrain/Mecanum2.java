@@ -65,6 +65,7 @@ public class Mecanum2 implements Drivetrain {
         setMotorPowers(new double[] {
             pY - pX, pY + pX, pY + pX, pY - pX
         });
+        Logger.instance.update();
 
         return true;
     }
@@ -104,6 +105,8 @@ public class Mecanum2 implements Drivetrain {
             // Clockwise
             setMotorPowers(new double[] {-power, -power, power, power});
         }
+
+        Logger.instance.update();
 
         return true;
     }
