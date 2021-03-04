@@ -35,7 +35,7 @@ public class Mecanum2 implements Drivetrain {
     @Override
     public boolean move(double magnitude, double angle, Drivetrain.Params params) {
         double currentMagnitude = getMoveMagnitude();
-        double distanceLeft = Math.abs(magnitude - currentMagnitude);
+        double distanceLeft = magnitude - currentMagnitude;
 
         Logger.instance.addData("move \\ distance left", distanceLeft);
         if (distanceLeft <= params.allowableDistanceError) {
@@ -44,7 +44,10 @@ public class Mecanum2 implements Drivetrain {
         }
 
         double power;
-        if (distanceLeft < params.rampDownEnd) {
+        if (distanceLeft < 0) {
+            Logger.instance.addData("move \\ state", "ramp down correct");
+            power = -params.minPower;
+        } else if (distanceLeft < params.rampDownEnd) {
             Logger.instance.addData("move \\ state", "ramp down end");
             power = params.minPower;
         } else if (distanceLeft > params.rampDownEnd && distanceLeft < params.rampDown) {
@@ -75,12 +78,15 @@ public class Mecanum2 implements Drivetrain {
         double absAngle = Math.abs(angle);
         double angleDiff = absAngle - absCurrentAngle;
 
-        if (angleDiff < params.allowableDistanceError) {
+        if (Math.abs(angleDiff) < params.allowableDistanceError) {
             return false;
         }
 
         double power;
-        if (angleDiff < params.rampDownEnd) {
+        if (angleDiff < 0) {
+            Logger.instance.addData("pivot \\ state", "ramp down correct");
+            power = -params.minPower;
+        } else if (angleDiff < params.rampDownEnd) {
             Logger.instance.addData("pivot \\ state", "ramp down end");
             power = params.minPower;
         } else if (angleDiff > params.rampDownEnd && angleDiff < params.rampDown) {
@@ -91,10 +97,11 @@ public class Mecanum2 implements Drivetrain {
             power = params.maxPower;
         }
 
-        // Counterclockwise
         if (direction == 1) {
+            // Counterclockwise
             setMotorPowers(new double[] {power, power, -power, -power});
         } else {
+            // Clockwise
             setMotorPowers(new double[] {-power, -power, power, power});
         }
 
