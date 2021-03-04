@@ -55,8 +55,10 @@ public class JelleTele extends BaseOpMode {
         }
     }
 
-    // setMotorPowers corrects the given motor powers so that they are all <= 1 
-    // and sets the motor powers.
+    /**
+     * Corrects the given motor powers so that they are all <= 1.0
+     * and sets the motor powers.
+     */
     protected void setMotorPowers(double mult, double[] powers) {
         for (int i = 0; i < 4; i++) {
             powers[i] = powers[i] * mult;

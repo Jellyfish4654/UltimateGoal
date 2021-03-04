@@ -13,10 +13,12 @@ import java.util.Calendar;
 public class Logger {
     Telemetry telemetry;
     FileLogger fileLogger;
+    public static Logger instance;
 
     public Logger(Telemetry telemetry) {
         this.telemetry = telemetry;
         this.fileLogger = new FileLogger();
+        instance = this;
     }
 
     public void addData(String label, Object o) {
@@ -26,6 +28,11 @@ public class Logger {
 
     public void addData(String label, String format, Object... args) {
         this.addData(label, String.format(format, args));
+    }
+
+    public void addAssert(boolean condition, String msg) {
+        if (!condition)
+            this.addData("assert", msg);
     }
 
     public void update() {

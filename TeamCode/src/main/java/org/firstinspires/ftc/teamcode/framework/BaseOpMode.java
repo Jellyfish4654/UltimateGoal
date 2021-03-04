@@ -7,7 +7,9 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 
 import org.firstinspires.ftc.teamcode.logging.Logger;
 
-// Base class for all OpModes. Provides methods for initializing hardware.
+/**
+ * Base class for all OpModes. Provides methods for initializing hardware.
+ * */
 public abstract class BaseOpMode extends LinearOpMode {
     protected DcMotor[] motors;
     protected BNO055IMU imu;
