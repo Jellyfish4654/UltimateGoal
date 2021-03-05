@@ -38,7 +38,7 @@ public class Mecanum2 implements Drivetrain {
         double distanceLeft = magnitude - currentMagnitude;
 
         Logger.instance.addData("move \\ distance left", distanceLeft);
-        if (distanceLeft <= params.allowableDistanceError) {
+        if (Math.abs(distanceLeft) <= params.allowableDistanceError) {
             this.stop();
             return false;
         }
