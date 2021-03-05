@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.framework;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
 import org.firstinspires.ftc.teamcode.logging.Logger;
+import org.firstinspires.ftc.teamcode.framework.Motors;
 
 /**
  * Base class for all OpModes. Provides methods for initializing hardware.
@@ -27,6 +29,11 @@ public abstract class BaseOpMode extends LinearOpMode {
             motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
+
+        motors[Motors.FR].setDirection(DcMotorSimple.Direction.FORWARD);
+        motors[Motors.BR].setDirection(DcMotorSimple.Direction.FORWARD);
+        motors[Motors.FL].setDirection(DcMotorSimple.Direction.REVERSE);
+        motors[Motors.BL].setDirection(DcMotorSimple.Direction.REVERSE);
 
         logger = new Logger(telemetry);
 

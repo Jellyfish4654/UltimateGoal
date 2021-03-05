@@ -62,8 +62,12 @@ public class Mecanum2 implements Drivetrain {
         double pX = power * Math.cos(angle);
         double pY = power * Math.sin(angle);
 
+        Logger.instance.addData("move \\ power", "%f", power);
+        Logger.instance.addData("move \\ angle", "%f", angle);
+        Logger.instance.addData("move \\ coords", "%f, %f", pX, pY);
+
         setMotorPowers(new double[] {
-            pY - pX, pY + pX, pY + pX, pY - pX
+            pY + pX, pY - pX, pY - pX, pY + pX
         });
         Logger.instance.update();
 
@@ -123,8 +127,8 @@ public class Mecanum2 implements Drivetrain {
      * and sets the motor powers.
      */
     protected void setMotorPowers(double[] powers) {
-        double max = Math.max(Math.max(powers[0], powers[1]), Math.max(powers[2], powers[3]));
-        double scale = 1 / max;
+        double max = Math.max(Math.max(Math.abs(powers[0]), Math.abs(powers[1])), Math.max(Math.abs(powers[2]), Math.abs(powers[3])));
+        double scale = Math.abs(1 / max);
         // don't increase power, only decrease
         if (scale > 1) {
             scale = 1;

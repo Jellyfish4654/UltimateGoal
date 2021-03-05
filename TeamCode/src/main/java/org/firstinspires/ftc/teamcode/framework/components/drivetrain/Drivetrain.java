@@ -36,7 +36,7 @@ public interface Drivetrain {
         public static Params moveParams(double ticksPerX) {
             Params p = new Params();
             p.rampUp = 1 * ticksPerX;
-            p.rampDown = 10 * ticksPerX;
+            p.rampDown = 8 * ticksPerX;
             p.rampDownEnd = 3 * ticksPerX;
             p.allowableDistanceError = 0.1 * ticksPerX;
             return p;

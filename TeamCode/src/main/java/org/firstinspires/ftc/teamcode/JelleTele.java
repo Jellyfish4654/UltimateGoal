@@ -45,10 +45,10 @@ public class JelleTele extends BaseOpMode {
                 mX = gamepad1.left_stick_x;
                 mY = gamepad1.left_stick_y;
                 setMotorPowers(mult, new double[] {
-                    mY - mX - pivot,
-                    mY + mX - pivot,
                     mY + mX + pivot,
-                    mY - mX + pivot});
+                    mY - mX + pivot,
+                    mY - mX - pivot,
+                    mY + mX - pivot});
                 break;
             }
             }
@@ -65,8 +65,8 @@ public class JelleTele extends BaseOpMode {
             powers[i] = powers[i] * mult;
         }
 
-        double max = Math.max(Math.max(powers[0], powers[1]), Math.max(powers[2], powers[3]));
-        double scale = 1 / max;
+        double max = Math.max(Math.max(Math.abs(powers[0]), Math.abs(powers[1])), Math.max(Math.abs(powers[2]), Math.abs(powers[3])));
+        double scale = Math.abs(1 / max);
         // don't increase power, only decrease
         if (scale > 1) {
             scale = 1;

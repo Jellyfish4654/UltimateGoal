@@ -29,7 +29,7 @@ public class AutoOp extends BaseOpMode {
         waitForStart();
 
         dt.reset();
-        while (dt.move(5 * TICKS_PER_IN, Math.PI / 2, defaultMoveParams));
+        while (dt.move(36 * TICKS_PER_IN, Math.PI / 2, defaultMoveParams));
         dt.stop();
 
         try {
