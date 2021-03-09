@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.framework.components.drivetrain;
+package org.firstinspires.ftc.teamcode.framework.components.autodrivetrain;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * Base interface for auto Drivetrain. All
  * positions are in encoder ticks for distance measures, radians for angle measures
  */
-public interface Drivetrain {
+public interface AutoDrivetrain {
     public static class Params {
         /** Position where robot stops ramping up */
         public double rampUp;
@@ -27,8 +27,8 @@ public interface Drivetrain {
         public double allowableDistanceError;
 
         public Params() {
-            this.maxPower = 0.9;
-            this.minPower = 0.2;
+            this.maxPower = 0.8;
+            this.minPower = 0.3;
 //            this.correctionTime = 100;
         }
 

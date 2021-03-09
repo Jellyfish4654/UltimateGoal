@@ -1,7 +1,7 @@
-package org.firstinspires.ftc.teamcode.framework.components.drivetrain;
+package org.firstinspires.ftc.teamcode.framework.components.autodrivetrain;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import org.firstinspires.ftc.teamcode.framework.components.drivetrain.Drivetrain;
+import org.firstinspires.ftc.teamcode.framework.components.autodrivetrain.AutoDrivetrain;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
 import org.firstinspires.ftc.teamcode.logging.Logger;
@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.framework.Motors;
  * Mecanum2 represents a mecanum drivetrain using the built-in
  * encoders.
  */
-public class Mecanum2 implements Drivetrain {
+public class Mecanum2 implements AutoDrivetrain {
     private DcMotor[] motors;
     private BNO055IMU imu;
 
@@ -33,7 +33,7 @@ public class Mecanum2 implements Drivetrain {
     }
 
     @Override
-    public boolean move(double magnitude, double angle, Drivetrain.Params params) {
+    public boolean move(double magnitude, double angle, AutoDrivetrain.Params params) {
         double currentMagnitude = getMoveMagnitude();
         double distanceLeft = magnitude - currentMagnitude;
 
@@ -75,7 +75,7 @@ public class Mecanum2 implements Drivetrain {
     }
 
     double pivotInitialAngle;
-    @Override public boolean pivot(double angle, Drivetrain.Params params) {
+    @Override public boolean pivot(double angle, AutoDrivetrain.Params params) {
         double currentAngle = -imu.getAngularOrientation().firstAngle - pivotInitialAngle;
         Logger.instance.addData("pivot \\ angle", currentAngle * 180 / Math.PI);
         int direction = (int)(Math.abs(angle) / angle);
@@ -142,6 +142,6 @@ public class Mecanum2 implements Drivetrain {
 
     @Override public void reset() {
         pivotInitialAngle = -imu.getAngularOrientation().firstAngle;
-        Drivetrain.resetEncoders(motors);
+        AutoDrivetrain.resetEncoders(motors);
     }
 }
