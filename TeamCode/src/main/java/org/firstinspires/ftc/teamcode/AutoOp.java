@@ -22,7 +22,7 @@ public class AutoOp extends BaseOpMode {
     public void runOpMode() throws InterruptedException {
         initHardware();
 
-        dt = new Mecanum2(drivetrain.motors, imu);
+        dt = new Mecanum2(drivetrain, imu);
         defaultMoveParams = AutoDrivetrain.Params.moveParams(TICKS_PER_REV);
         defaultPivotParams = AutoDrivetrain.Params.pivotParams();
         defaultMoveParams.maxPower = 0.4;

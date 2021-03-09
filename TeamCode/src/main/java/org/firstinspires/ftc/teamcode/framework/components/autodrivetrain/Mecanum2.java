@@ -6,17 +6,18 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 
 import org.firstinspires.ftc.teamcode.logging.Logger;
 import org.firstinspires.ftc.teamcode.framework.Motors;
+import org.firstinspires.ftc.teamcode.framework.components.Drivetrain;
 
 /**
  * Mecanum2 represents a mecanum drivetrain using the built-in
  * encoders.
  */
 public class Mecanum2 implements AutoDrivetrain {
-    private DcMotor[] motors;
+    private Drivetrain drivetrain;
     private BNO055IMU imu;
 
-    public Mecanum2(DcMotor[] motors, BNO055IMU imu) {
-        this.motors = motors;
+    public Mecanum2(Drivetrain drivetrain, BNO055IMU imu) {
+        this.drivetrain = drivetrain;
         this.imu = imu;
     }
 
@@ -24,11 +25,12 @@ public class Mecanum2 implements AutoDrivetrain {
      * Returns the current magnitude of a move operation (i.e. how much the robot has moved so far) in ticks.
      */
     protected double getMoveMagnitude() {
-        Logger.instance.addData("move \\ motor positions", "r %d %d l %d %d", motors[Motors.FR].getCurrentPosition(), motors[Motors.BL].getCurrentPosition(),
-            motors[Motors.FL].getCurrentPosition(), motors[Motors.BR].getCurrentPosition());
+        double[] encoders = drivetrain.encoderPositions();
+        Logger.instance.addData("move \\ motor positions", "r %.1f %.1f l %.1f %.1f",
+            encoders[Motors.FR], encoders[Motors.BR], encoders[Motors.FL], encoders[Motors.BL]);
 
-        double rPos = (motors[Motors.FR].getCurrentPosition() + motors[Motors.BL].getCurrentPosition()) / 2; // should be about the same
-        double lPos = (motors[Motors.FL].getCurrentPosition() + motors[Motors.BR].getCurrentPosition()) / 2; // should be about the same
+        double rPos = (encoders[Motors.FR] + encoders[Motors.BL]) / 2; // should be about the same
+        double lPos = (encoders[Motors.BR] + encoders[Motors.FL]) / 2; // should be about the same
         return Math.sqrt(rPos*rPos + lPos*lPos);
     }
 
@@ -66,10 +68,11 @@ public class Mecanum2 implements AutoDrivetrain {
         Logger.instance.addData("move \\ angle", "%f", angle);
         Logger.instance.addData("move \\ coords", "%f, %f", pX, pY);
 
-        setMotorPowers(new double[] {
+        setMotorSpeeds(new double[] {
             pY + pX, pY - pX, pY - pX, pY + pX
         });
         Logger.instance.update();
+        drivetrain.update();
 
         return true;
     }
@@ -104,21 +107,20 @@ public class Mecanum2 implements AutoDrivetrain {
 
         if (direction == 1) {
             // Counterclockwise
-            setMotorPowers(new double[] {power, power, -power, -power});
+            setMotorSpeeds(new double[] {power, power, -power, -power});
         } else {
             // Clockwise
-            setMotorPowers(new double[] {-power, -power, power, power});
+            setMotorSpeeds(new double[] {-power, -power, power, power});
         }
 
         Logger.instance.update();
+        drivetrain.update();
 
         return true;
     }
 
     @Override public void stop() {
-        for (DcMotor motor : motors) {
-            motor.setPower(0);
-        }
+        drivetrain.setSpeeds(new double[]{0,0,0,0});
         reset();
     }
 
@@ -126,7 +128,7 @@ public class Mecanum2 implements AutoDrivetrain {
      * Corrects the given motor powers so that they are all <= 1.0
      * and sets the motor powers.
      */
-    protected void setMotorPowers(double[] powers) {
+    protected void setMotorSpeeds(double[] powers) {
         double max = Math.max(Math.max(Math.abs(powers[0]), Math.abs(powers[1])), Math.max(Math.abs(powers[2]), Math.abs(powers[3])));
         double scale = Math.abs(1 / max);
         // don't increase power, only decrease
@@ -136,12 +138,15 @@ public class Mecanum2 implements AutoDrivetrain {
 
         for (int i = 0; i < 4; i++) {
             powers[i] *= scale;
-            motors[i].setPower(powers[i]);
         }
+        for (int i = 0; i < 4; i++) {
+            powers[i] *= Drivetrain.MAX_SPEED;
+        }
+        drivetrain.setSpeeds(powers);
     }
 
     @Override public void reset() {
         pivotInitialAngle = -imu.getAngularOrientation().firstAngle;
-        AutoDrivetrain.resetEncoders(motors);
+        drivetrain.reset();
     }
 }

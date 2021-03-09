@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.framework.Motors;
+import org.firstinspires.ftc.teamcode.framework.components.Drivetrain;
 
 @TeleOp(name = "UltimateGoal JelleTele")
 public class JelleTele extends BaseOpMode {
@@ -35,7 +36,7 @@ public class JelleTele extends BaseOpMode {
             case TANK: {
                 double l = gamepad1.left_stick_y,
                     r = gamepad1.right_stick_y;
-                setMotorPowers(mult, new double[] {r, r, l, l});
+                setMotorSpeeds(mult, new double[] {r, r, l, l});
                 break;
             }
             case MECANUM: {
@@ -44,7 +45,7 @@ public class JelleTele extends BaseOpMode {
                 double mX, mY;
                 mX = gamepad1.left_stick_x;
                 mY = gamepad1.left_stick_y;
-                setMotorPowers(mult, new double[] {
+                setMotorSpeeds(mult, new double[] {
                     mY + mX + pivot,
                     mY - mX + pivot,
                     mY - mX - pivot,
@@ -60,7 +61,7 @@ public class JelleTele extends BaseOpMode {
      * Corrects the given motor powers so that they are all <= 1.0
      * and sets the motor powers.
      */
-    protected void setMotorPowers(double mult, double[] powers) {
+    protected void setMotorSpeeds(double mult, double[] powers) {
         for (int i = 0; i < 4; i++) {
             powers[i] = powers[i] * mult;
         }
@@ -74,7 +75,10 @@ public class JelleTele extends BaseOpMode {
 
         for (int i = 0; i < 4; i++) {
             powers[i] *= scale;
-            drivetrain.motors[i].setPower(powers[i]);
         }
+        for (int i = 0; i < 4; i++) {
+            powers[i] *= Drivetrain.MAX_SPEED;
+        }
+        drivetrain.setSpeeds(powers);
     }
 }

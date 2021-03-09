@@ -9,6 +9,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * Represents a drivetrain.
  */
 public class Drivetrain {
+    // estimate, tbd
+    public final static double MAX_SPEED = 1.5;
+
     private class Readings {
         public long time;
         public double[] readings;
@@ -19,7 +22,14 @@ public class Drivetrain {
         }
     }
 
-    public DcMotor[] motors;
+    protected DcMotor[] motors;
+    public double[] encoderPositions() {
+        double[] readingsArr = new double[4];
+        for (int i = 0; i < 4; i++) {
+            readingsArr[i] = motors[i].getCurrentPosition();
+        }
+        return readingsArr;
+    }
 
     /**
      * Array of length 2 whose first element
@@ -44,15 +54,16 @@ public class Drivetrain {
      * @param speeds The target speed in encoder ticks per second.
      */
     public void setSpeeds(double[] speeds) {
+        for (int i = 0; i < 4; i++) {
+            if (speeds[i] == 0) {
+                motors[i].setPower(0);
+            }
+        }
         this.targetSpeeds = speeds;
     }
 
     private void addReading() {
-        double[] readingsArr = new double[4];
-        for (int i = 0; i < 4; i++) {
-            readingsArr[i] = motors[i].getCurrentPosition();
-        }
-        Readings readingsItem = new Readings(readingsArr, System.currentTimeMillis());
+        Readings readingsItem = new Readings(encoderPositions(), System.currentTimeMillis());
         readings.add(readingsItem);
         while (readings.size() > 10) {
             readings.remove(0);
@@ -63,9 +74,9 @@ public class Drivetrain {
      * Call this function in your main loop.
      * It automatically adjusts motor speeds.
      */
-    public void loop() {
+    public void update() {
         if (this.targetSpeeds == null) return;
-        
+
         addReading();
 
         for (int i = 0; i < 4; i++) {

@@ -81,14 +81,4 @@ public interface AutoDrivetrain {
      * Resets encoder positions. This should be called before each pivot or move operation.
      */
     void reset();
-
-    /**
-     * Resets all given motors.
-     */
-    static void resetEncoders(DcMotor[] encoders) {
-        for (DcMotor encoder: encoders) {
-            encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            encoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
-    }
 }

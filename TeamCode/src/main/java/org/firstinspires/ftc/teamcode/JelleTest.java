@@ -25,7 +25,7 @@ public class JelleTest extends BaseOpMode {
                 });
             }
 
-            drivetrain.loop();
+            drivetrain.update();
         }
     }
 }

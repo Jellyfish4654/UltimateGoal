@@ -20,16 +20,19 @@ public abstract class BaseOpMode extends LinearOpMode {
     protected Logger logger;
 
     protected void initHardware() {
-        drivetrain = new Drivetrain(new DcMotor[] {
+        DcMotor[] motors = new DcMotor[] {
             hardwareMap.dcMotor.get("motor fr"),
             hardwareMap.dcMotor.get("motor br"),
             hardwareMap.dcMotor.get("motor fl"),
             hardwareMap.dcMotor.get("motor bl")
-        });
-        drivetrain.motors[Motors.FR].setDirection(DcMotorSimple.Direction.FORWARD);
-        drivetrain.motors[Motors.BR].setDirection(DcMotorSimple.Direction.FORWARD);
-        drivetrain.motors[Motors.FL].setDirection(DcMotorSimple.Direction.REVERSE);
-        drivetrain.motors[Motors.BL].setDirection(DcMotorSimple.Direction.REVERSE);
+        };
+
+        motors[Motors.FR].setDirection(DcMotorSimple.Direction.FORWARD);
+        motors[Motors.BR].setDirection(DcMotorSimple.Direction.FORWARD);
+        motors[Motors.FL].setDirection(DcMotorSimple.Direction.REVERSE);
+        motors[Motors.BL].setDirection(DcMotorSimple.Direction.REVERSE);
+
+        drivetrain = new Drivetrain(motors);
         drivetrain.reset();
 
         logger = new Logger(telemetry);
