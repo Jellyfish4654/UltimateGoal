@@ -62,6 +62,16 @@ public class Drivetrain {
         this.targetSpeeds = speeds;
     }
 
+    /**
+     * Temporary testing function.
+     */
+    public void _setPowers(double[] powers) {
+        targetSpeeds = null;
+        for (int i = 0; i < 4; i++) {
+            motors[i].setPower(powers[i]);
+        }
+    }
+
     private void addReading() {
         Readings readingsItem = new Readings(encoderPositions(), System.currentTimeMillis());
         readings.add(readingsItem);

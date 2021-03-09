@@ -14,14 +14,17 @@ public class JelleTest extends BaseOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            if (gamepad1.a) {
-                drivetrain.setSpeeds(new double[]{0.4,0.4,0.4,0.4});
+            if (gamepad1.b) {
+                drivetrain._setPowers(new double[]{1,1,1,1});
+            } else if (gamepad1.a) {
+                double s = 0.5*Drivetrain.MAX_SPEED;
+                drivetrain.setSpeeds(new double[]{s,s,s,s});
             } else {
                 drivetrain.setSpeeds(new double[] {
-                    gamepad1.dpad_up ? 0.2 : 0, // FR
-                    gamepad1.dpad_right ? 0.2 : 0, // BR
-                    gamepad1.dpad_left ? 0.2 : 0, // FL
-                    gamepad1.dpad_down ? 0.2 : 0 // BL
+                    gamepad1.dpad_up ? 0.2*Drivetrain.MAX_SPEED : 0, // FR
+                    gamepad1.dpad_right ? 0.2*Drivetrain.MAX_SPEED : 0, // BR
+                    gamepad1.dpad_left ? 0.2*Drivetrain.MAX_SPEED : 0, // FL
+                    gamepad1.dpad_down ? 0.2*Drivetrain.MAX_SPEED : 0 // BL
                 });
             }
 
