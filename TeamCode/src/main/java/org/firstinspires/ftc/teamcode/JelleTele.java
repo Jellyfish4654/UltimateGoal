@@ -74,7 +74,7 @@ public class JelleTele extends BaseOpMode {
 
         for (int i = 0; i < 4; i++) {
             powers[i] *= scale;
-            motors[i].setPower(powers[i]);
+            drivetrain.motors[i].setPower(powers[i]);
         }
     }
 }

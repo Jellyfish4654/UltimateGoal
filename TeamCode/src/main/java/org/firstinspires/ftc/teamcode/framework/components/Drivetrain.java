@@ -33,11 +33,10 @@ public class Drivetrain {
     protected List<Readings> readings;
     protected double[] targetSpeeds;
 
-    public Drivetrain(DcMotor[] motors, double[] pid) {
-        this.targetSpeeds = new double[4];
+    public Drivetrain(DcMotor[] motors) {
         this.readings = new ArrayList<Readings>();
         this.motors = motors;
-        this.pid = pid;
+        this.pid = new double[]{0.1, 0.1};
     }
 
     /**
@@ -65,6 +64,8 @@ public class Drivetrain {
      * It automatically adjusts motor speeds.
      */
     public void loop() {
+        if (this.targetSpeeds == null) return;
+        
         addReading();
 
         for (int i = 0; i < 4; i++) {
@@ -101,5 +102,7 @@ public class Drivetrain {
             encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             encoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
+
+        readings.clear();
     }
 }
