@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.framework.components.Drivetrain;
 public class JelleTele extends BaseOpMode {
     protected static enum DriveMode {
         TANK,
+        DRIVE,
         MECANUM,
     }
 
@@ -23,8 +24,10 @@ public class JelleTele extends BaseOpMode {
         while (opModeIsActive()) {
             if (gamepad1.dpad_left) {
                 driveMode = DriveMode.TANK;
-            } else if (gamepad1.dpad_right) { 
+            } else if (gamepad1.dpad_up) { 
                 driveMode = DriveMode.MECANUM;
+            } else if (gamepad1.dpad_right) {
+                driveMode = DriveMode.DRIVE;
             }
 
             double mult = gamepad1.left_bumper ? 0.2 : gamepad1.right_bumper ? 0.5 : 1.0;
@@ -37,6 +40,16 @@ public class JelleTele extends BaseOpMode {
                 double l = gamepad1.left_stick_y,
                     r = gamepad1.right_stick_y;
                 setMotorSpeeds(mult, new double[] {r, r, l, l});
+                break;
+            }
+            case DRIVE: {
+                double pivot = gamepad1.left_stick_x, y = gamepad1.left_stick_y;
+                setMotorSpeeds(mult, new double[] {
+                    y+pivot,
+                    y+pivot,
+                    y-pivot,
+                    y-pivot
+                });
                 break;
             }
             case MECANUM: {
